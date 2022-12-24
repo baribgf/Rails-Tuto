@@ -1,0 +1,55 @@
+<h1>Langs</h1>
+
+<% if @langs.length < 1 %>
+    <h4>Nothing here .</h4>
+<% end %>
+<% for lang in @langs %>
+    <p><%= lang.id %> - <%= lang.name %>: <%= lang.year %></p>
+<% end %>
+
+<label for="lang_name">Name: </label>
+<input type="text" id="lang_name"> <br><br>
+<label for="lang_year">Year: </label>
+<input type="text" id="lang_year"> <br><br>
+<input type="button" id="add-btn" value="Add"> <br><br>
+<label for="lang_id">Id: </label>
+<input type="text" id="lang_id"> <br><br>
+<input type="button" id="del-btn" value="Delete">
+
+<script>
+    const CSRF_TOKEN = "<%= session[:_csrf_token] %>"
+    document.getElementById("add-btn").onclick = ()=> {
+        let langName = document.getElementById("lang_name").value
+        let langYear = document.getElementById("lang_year").value
+        fetch("/new", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': CSRF_TOKEN
+            },
+            body: JSON.stringify({"name": langName, "year": langYear})
+        })
+            .then(res => res.text())
+            .then(data => {
+                if (data == "OK") window.location.reload();
+                else alert('NO');
+            })
+    }
+
+    document.getElementById("del-btn").onclick = ()=> {
+        let langId = document.getElementById("lang_id").value
+        fetch("/delete", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': CSRF_TOKEN
+            },
+            body: JSON.stringify({"id": langId})
+        })
+            .then(res => res.text())
+            .then(data => {
+                if (data == "OK") window.location.reload();
+                else alert('NO');
+            })
+    }
+</script>
