@@ -3,8 +3,8 @@
 <% if @langs.length < 1 %>
     <h4>Nothing here .</h4>
 <% end %>
-<% for lang in @langs %>
-    <p><%= lang.id %> - <%= lang.name %>: <%= lang.year %></p>
+<% for id, lang in @langs %>
+    <p><%= id %> - <%= lang["name"] %>: <%= lang["year"] %></p>
 <% end %>
 
 <label for="lang_name">Name: </label>
