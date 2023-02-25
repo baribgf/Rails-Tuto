@@ -18,6 +18,9 @@
 <input type="button" id="del-btn" value="Delete">
 
 <script>
+    const titleElement = document.createElement('title')
+    titleElement.innerHTML = "RailsTuto - Langs"
+    document.querySelector('head').appendChild(titleElement)
     //const CSRF_TOKEN = "<%= session[:_csrf_token] %>"
     const CSRF_TOKEN = "hxcGqfAH_kE909VHcWK-jevzWghABDxysfiDQR6HBCQ"
     document.getElementById("add-btn").onclick = ()=> {
