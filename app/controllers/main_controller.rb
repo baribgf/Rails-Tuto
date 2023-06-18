@@ -8,11 +8,12 @@
 
 class MainController < ApplicationController
   def initialize
-    base_uri = 'https://bari-example-default-rtdb.europe-west1.firebasedatabase.app/'
+    base_uri = 'https://rails-tuto-42622-default-rtdb.europe-west1.firebasedatabase.app/'
     firebase_db_key = File.open('firebase-db-key.json').read
     @firebase = Firebase::Client.new(base_uri, firebase_db_key)
     @lang_db_name = "langs"
   end
+
   def index
     @langs = {}
     n = 0
@@ -27,12 +28,12 @@ class MainController < ApplicationController
   end
 
   def new
-    @lang = params[:name]
-    @year = params[:year]
+    lang = params[:name]
+    year = params[:year]
     
     begin
-      if @lang.length > 0 and @year.length > 0
-        @firebase.push(@lang_db_name, {name: @lang, year: @year})
+      if lang.length > 0 and year.length > 0
+        @firebase.push(@lang_db_name, {name: lang, year: year})
         render plain: "OK"
       end
     rescue => e
@@ -43,15 +44,16 @@ class MainController < ApplicationController
 
   def delete
     id = params[:id]
-   begin
-    status = @firebase.delete(@lang_db_name + "/" + @firebase.get(@lang_db_name).body.keys[id.to_i - 1])
-    if status.code != 200
-      raise
+    
+    begin
+      status = @firebase.delete(@lang_db_name + "/" + @firebase.get(@lang_db_name).body.keys[id.to_i - 1])
+      if status.code != 200
+        raise
+      end
+      render plain: "OK"
+    rescue => exception
+      puts exception
+      render plain: "NO"
     end
-    render plain: "OK"
-   rescue => exception
-    puts exception
-    render plain: "NO"
-   end
   end
 end
